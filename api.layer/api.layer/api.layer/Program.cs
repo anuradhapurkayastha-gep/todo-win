@@ -13,6 +13,7 @@ namespace api.layer
     {
         public static void Main(string[] args)
         {
+            //ok
             CreateHostBuilder(args).Build().Run();
         }
 
