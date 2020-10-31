@@ -57,5 +57,21 @@ namespace api.layer.Controllers
 
             return Ok(true);
         }
+
+        [HttpGet]
+        public IActionResult InValidAction() {
+            return null;
+        }
+
+        [HttpGet]
+        public IActionResult InvalidAction1(int a,int b) {
+            return Ok(a + b);
+        }
+
+        [HttpGet]
+        public IActionResult InvalidAction2(int a, int b)
+        {
+            return Ok(a + b);
+        }
     }
 }
