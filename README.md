@@ -1,2 +1,2 @@
 # todo-win
-This repo will be used for Gep-Teckathon 2020.
+This repo will be used for Teckathon 2020.
