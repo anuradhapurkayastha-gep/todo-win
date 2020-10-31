@@ -16,10 +16,9 @@ jobs:
       - name: Cache SonarCloud packages
         uses: actions/cache@v1
         with:
-          path: ~\sonar\cache
+          path: ~\api.layer
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
-          working-directory: api.layer/
       - name: Cache SonarCloud scanner
         id: cache-sonar-scanner
         uses: actions/cache@v1
