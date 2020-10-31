@@ -12,6 +12,6 @@ namespace api.layer
 
         public string Summary { get; set; }
         
-        public string Summary123123 { get; set; }
+        public string Summary123 { get; set; }
     }
 }
