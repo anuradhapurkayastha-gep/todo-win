@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using api.layer.BusinessLayer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -12,10 +13,12 @@ namespace api.layer.Controllers
     public class GitWebHookController : Controller
     {
         private readonly ILogger<GitWebHookController> _logger;
+        private readonly IGitActionsManager _gitActionsManager;
 
-        public GitWebHookController(ILogger<GitWebHookController> logger)
+        public GitWebHookController(ILogger<GitWebHookController> logger, IGitActionsManager gitActionsManager)
         {
             _logger = logger;
+            _gitActionsManager = gitActionsManager;
         }
 
         private static readonly string[] Summaries = new[]
@@ -39,18 +42,19 @@ namespace api.layer.Controllers
         [HttpPost]
         public IActionResult Post(GitActions gitActions)
         {
-            // Create a string array with the lines of text
-            string lines = "First line";
-
-            // Set a variable to the Documents path.
-            string docPath =
-              Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-
-            // Write the string array to a new file named "WriteLines.txt".
-            using (StreamWriter outputFile = new StreamWriter(Path.Combine(docPath, "WriteLines.txt")))
+            if (gitActions.action == "opened")
             {
-                outputFile.WriteLine(lines);
+                _gitActionsManager.OpenRequestedCreated(gitActions);
             }
+            else if (gitActions.action == "created")
+            {
+                _gitActionsManager.PullRequestedCreated(gitActions);
+            }
+            else if(gitActions.action == "review_requested")
+            {
+                return Ok(true);
+            }
+
             return Ok(true);
         }
     }
