@@ -65,8 +65,15 @@ namespace api.layer.BusinessLayer
 
         public async Task<bool> ChecksCompleted(GitActions gitActions)
         {
-            await PullRequestSonarDetails(ToDoConstants.PULL_REQUEST_SONAR_URL + gitActions?.check_run.pull_requests?.FirstOrDefault().number.ToString());
-            return true;
+            if(gitActions?.check_run.pull_requests != null && gitActions?.check_run.pull_requests.Length > 0)
+            {
+                await PullRequestSonarDetails(ToDoConstants.PULL_REQUEST_SONAR_URL + gitActions?.check_run.pull_requests?.FirstOrDefault().number.ToString());
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }
