@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace api.layer.Controllers
 {
@@ -50,9 +51,9 @@ namespace api.layer.Controllers
             {
                 _gitActionsManager.PullRequestedCreated(gitActions);
             }
-            else if(gitActions.action == "review_requested")
+            else if(gitActions.action == "submitted")
             {
-                return Ok(true);
+                _gitActionsManager.PRReviewed(gitActions);
             }
 
             return Ok(true);

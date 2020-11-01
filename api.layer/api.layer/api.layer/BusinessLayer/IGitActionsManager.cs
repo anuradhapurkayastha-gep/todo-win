@@ -8,5 +8,8 @@ namespace api.layer.BusinessLayer
         public Task<JObject> OpenRequestedCreated(GitActions gitActions);
 
         public bool PullRequestedCreated(GitActions gitActions);
+
+        public void PRReviewed(GitActions gitActions);
+
     }
 }
