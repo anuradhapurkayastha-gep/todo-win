@@ -67,7 +67,7 @@ namespace api.layer.BusinessLayer
             }
         }
 
-        public async Task<PullRequestSonarDetails> PullRequestSonarDetails(string URL)
+        public async Task<PullRequestSonarDetails> PullRequestSonarDetails(string URL, int? PRId)
         {
             if (PRId != null)
             {
