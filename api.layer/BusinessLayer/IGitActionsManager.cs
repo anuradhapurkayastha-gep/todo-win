@@ -8,7 +8,7 @@ namespace api.layer.BusinessLayer
 
         public bool PullRequestedCreated(GitActions gitActions);
 
-        public void PRReviewed(GitActions gitActions);
+        public Task<bool> PRReviewed(GitActions gitActions);
 
         public Task<bool> ChecksCompleted(GitActions gitActions);
     }

@@ -54,9 +54,6 @@ namespace api.layer.Controllers
             {
                 _gitActionsManager.ChecksCompleted(gitActions);
             }
-            else if(gitActions.action == "review_requested")
-            { 
-            }
             else if(gitActions.action == "submitted")
             {
                 _gitActionsManager.PRReviewed(gitActions);
