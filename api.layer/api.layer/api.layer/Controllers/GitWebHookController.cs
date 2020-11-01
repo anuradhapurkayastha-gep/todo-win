@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 
@@ -50,6 +49,13 @@ namespace api.layer.Controllers
             else if (gitActions.action == "created")
             {
                 _gitActionsManager.PullRequestedCreated(gitActions);
+            }
+            else if (gitActions.action == "completed")
+            {
+                _gitActionsManager.ChecksCompleted(gitActions);
+            }
+            else if(gitActions.action == "review_requested")
+            { 
             }
             else if(gitActions.action == "submitted")
             {

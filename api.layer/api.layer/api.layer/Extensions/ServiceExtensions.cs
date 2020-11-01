@@ -1,4 +1,5 @@
 ﻿using api.layer.BusinessLayer;
+using api.layer.DataAccessLayer;
 using Microsoft.Extensions.DependencyInjection;
 using System.Diagnostics.CodeAnalysis;
 
@@ -18,6 +19,7 @@ namespace api.layer.Extensions
         public static IServiceCollection RegisterServices(this IServiceCollection services)
         {
             services.AddTransient<IGitActionsManager, GitActionsManager>();
+            services.AddTransient<IGitActionsDAO, GitActionsDAO>();
             return services;
         }
     }
