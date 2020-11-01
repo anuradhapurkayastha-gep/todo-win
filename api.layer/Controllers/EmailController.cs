@@ -17,6 +17,8 @@ namespace api.layer.Controllers
         public IEnumerable<WeatherForecast> Get()
         {
             var test21 = 123456;
+            var testa20 = 123456;
+            var testa21 = 123456;
             Execute().Wait();
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
