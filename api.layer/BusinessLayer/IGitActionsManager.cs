@@ -11,5 +11,7 @@ namespace api.layer.BusinessLayer
         public Task<bool> PRReviewed(GitActions gitActions);
 
         public Task<bool> ChecksCompleted(GitActions gitActions);
+
+        public Task<string> FetchRaitingReport();
     }
 }

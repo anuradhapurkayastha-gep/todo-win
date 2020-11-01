@@ -69,6 +69,8 @@ namespace api.layer.BusinessLayer
                         pullRequestEntity.action = gitActions.action;
                         pullRequestEntity.userid = gitActions.sender.id;
 
+                        await PullRequestSonarDetails(ToDoConstants.PULL_REQUEST_SONAR_URL + pullRequestEntity.number, pullRequestEntity.number);
+
                         await _gitActionsDAO.SavePullRequestDetails(pullRequestEntity);
                     }
                 }
@@ -130,6 +132,11 @@ namespace api.layer.BusinessLayer
             {
                 return false;
             }
+        }
+
+        public async Task<string> FetchRaitingReport()
+        {
+            return await _gitActionsDAO.FetchRaitingReport();
         }
 
     }

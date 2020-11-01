@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
 
 namespace api.layer.Controllers
 {
@@ -57,6 +56,10 @@ namespace api.layer.Controllers
             else if(gitActions.action == "submitted")
             {
                 _gitActionsManager.PRReviewed(gitActions);
+            }
+            else if (gitActions.action == "closed")
+            {
+                _gitActionsManager.OpenRequestedCreated(gitActions);
             }
 
             return Ok(true);

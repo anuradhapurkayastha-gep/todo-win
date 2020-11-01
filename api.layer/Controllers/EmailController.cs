@@ -13,7 +13,6 @@ namespace api.layer.Controllers
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
-            Mains().Wait();
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
@@ -21,11 +20,6 @@ namespace api.layer.Controllers
                 TemperatureC = rng.Next(-20, 55)
             })
             .ToArray();
-        }
-
-        static async Task<bool> Mains()
-        {
-            return true;
         }
     }
 }
