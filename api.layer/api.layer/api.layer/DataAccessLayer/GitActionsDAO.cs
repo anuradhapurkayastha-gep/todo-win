@@ -1,5 +1,6 @@
 ﻿using api.layer.Entities;
 using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 
@@ -39,7 +40,33 @@ namespace api.layer.DataAccessLayer
             }
         }
 
+        public async Task<bool> SaveSonarDetails(int? PRId, Dictionary<string, dynamic> SonarMetic)
+        {
+            using (SqlConnection sql = new SqlConnection(@"Data Source=MUM02L7746\SQLEXPRESS;Initial Catalog=TODO;Integrated Security=False;Persist Security Info=False;User ID=sa;Password=Password123"))
+            {
+                try
+                {
+                    using (SqlCommand cmd = new SqlCommand("SP_Sonar_Update", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@PRId", PRId));
 
+                        foreach(var item in SonarMetic)
+                        {
+                            cmd.Parameters.Add(new SqlParameter( "@" + item.Key, item.Value));
+                        }
+
+                        await sql.OpenAsync();
+                        await cmd.ExecuteNonQueryAsync();
+                        return true;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
 
     }
 }

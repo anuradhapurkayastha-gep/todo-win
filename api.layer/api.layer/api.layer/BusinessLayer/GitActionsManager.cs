@@ -2,8 +2,10 @@
 using api.layer.Entities;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace api.layer.BusinessLayer
@@ -49,25 +51,37 @@ namespace api.layer.BusinessLayer
             return true;
         }
 
-        public async Task<PullRequestSonarDetails> PullRequestSonarDetails(string URL)
+        public async Task<PullRequestSonarDetails> PullRequestSonarDetails(string URL, int? PRId)
         {
-            //ToDoConstants.PULL_REQUEST_SONAR_URL + pullRequestDetails.number.ToString()
-            using (var httpClient = new HttpClient())
+            if (PRId != null)
             {
-                using (var sonarResponse = await httpClient.GetAsync(URL))
+                using (var httpClient = new HttpClient())
                 {
-                    string sonarApiResponse = await sonarResponse.Content.ReadAsStringAsync();
-                    PullRequestSonarDetails pullRequestSonarDetails = JsonConvert.DeserializeObject<PullRequestSonarDetails>(sonarApiResponse);
-                    return pullRequestSonarDetails;
+                    using (var sonarResponse = await httpClient.GetAsync(URL))
+                    {
+                        string sonarApiResponse = await sonarResponse.Content.ReadAsStringAsync();
+                        PullRequestSonarDetails pullRequestSonarDetails = JsonConvert.DeserializeObject<PullRequestSonarDetails>(sonarApiResponse);
+
+                        Dictionary<string, dynamic> sonarMetric = new Dictionary<string, dynamic>();
+                        foreach (Measure item in pullRequestSonarDetails.Component.Measures)
+                        {
+                            sonarMetric.Add(item.Metric, item.Periods.FirstOrDefault().Value);
+                        }
+                        await _gitActionsDAO.SaveSonarDetails(PRId, sonarMetric);
+
+                        return pullRequestSonarDetails;
+                    }
                 }
             }
+
+            return new PullRequestSonarDetails();
         }
 
         public async Task<bool> ChecksCompleted(GitActions gitActions)
         {
             if(gitActions?.check_run.pull_requests != null && gitActions?.check_run.pull_requests.Length > 0)
             {
-                await PullRequestSonarDetails(ToDoConstants.PULL_REQUEST_SONAR_URL + gitActions?.check_run.pull_requests?.FirstOrDefault().number.ToString());
+                await PullRequestSonarDetails(ToDoConstants.PULL_REQUEST_SONAR_URL + gitActions?.check_run.pull_requests?.FirstOrDefault().number.ToString(), gitActions?.check_run.pull_requests?.FirstOrDefault().number);
                 return true;
             }
             else
