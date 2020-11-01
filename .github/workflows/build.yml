@@ -40,5 +40,5 @@ jobs:
         run: |
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"amitmishra-gep_todo-win" /o:"amitmishra-gep" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.scanner.force-deprecated-java-version="true"
           dotnet restore
-          dotnet build api.layer/api.layer/api.layer.sln --configuration Release --no-restore
+          dotnet build api.layer.sln --configuration Release --no-restore
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
