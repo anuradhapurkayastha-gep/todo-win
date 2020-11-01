@@ -1,2 +1,2 @@
 # Team - todo-win test
-This repo will be used for gepTeckathon 2020.
+This repo will be used for Teckathon 2020.
