@@ -1,6 +1,7 @@
 ﻿using api.layer.DataAccessLayer;
 using api.layer.Entities;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
 using System.Net.Http;
@@ -49,6 +50,21 @@ namespace api.layer.BusinessLayer
             return true;
         }
 
+        public async void PRReviewed(GitActions gitActions)
+        {
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.DefaultRequestHeaders.Add("User-Agent", "TODO-App");
+                using (var response = await httpClient.GetAsync(gitActions.pull_request.url))
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    var test = JsonConvert.DeserializeObject<JObject>(apiResponse);
+
+                    //SQL Code    
+                }
+            }
+        }
+
         public async Task<PullRequestSonarDetails> PullRequestSonarDetails(string URL)
         {
             //ToDoConstants.PULL_REQUEST_SONAR_URL + pullRequestDetails.number.ToString()
@@ -75,5 +91,6 @@ namespace api.layer.BusinessLayer
                 return false;
             }
         }
+
     }
 }
