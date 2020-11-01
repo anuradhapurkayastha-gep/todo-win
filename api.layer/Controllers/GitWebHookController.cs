@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
-test
 
 namespace api.layer.Controllers
 {
@@ -13,6 +12,7 @@ namespace api.layer.Controllers
     [Route("[controller]")]
     public class GitWebHookController : Controller
     {
+        var test = 1;
         private readonly ILogger<GitWebHookController> _logger;
         private readonly IGitActionsManager _gitActionsManager;
 
