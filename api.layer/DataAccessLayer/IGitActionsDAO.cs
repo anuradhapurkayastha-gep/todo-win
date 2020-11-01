@@ -9,5 +9,7 @@ namespace api.layer.DataAccessLayer
         public Task<bool> SavePullRequestDetails(PullRequestEntity pullRequestEntity);
 
         public Task<bool> SaveSonarDetails(int? PRId, Dictionary<string, dynamic> SonarMetic);
+
+        public Task<string> FetchRaitingReport();
     }
 }

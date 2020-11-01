@@ -20,6 +20,8 @@ namespace api.layer.BusinessLayer
             _gitActionsDAO = gitActionsDAO;
         }
 
+        private string[] stringArray = { "new_vulnerabilities", "new_reliability_rating", "new_security_rating", "new_bugs", "new_code_smells", "new_security_hotspots", "new_maintainability_rating" };
+
         public async Task<bool> OpenRequestedCreated(GitActions gitActions)
         {
             try
@@ -52,19 +54,33 @@ namespace api.layer.BusinessLayer
             return true;
         }
 
-        public async void PRReviewed(GitActions gitActions)
+        public async Task<bool> PRReviewed(GitActions gitActions)
         {
-            using (var httpClient = new HttpClient())
+            try
             {
-                httpClient.DefaultRequestHeaders.Add("User-Agent", "TODO-App");
-                using (var response = await httpClient.GetAsync(gitActions.pull_request.url))
+                using (var httpClient = new HttpClient())
                 {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    var test = JsonConvert.DeserializeObject<JObject>(apiResponse);
+                    httpClient.DefaultRequestHeaders.Add("User-Agent", "TODO-App");
+                    using (var response = await httpClient.GetAsync(gitActions.pull_request.url))
+                    {
+                        string apiResponse = await response.Content.ReadAsStringAsync();
+                        PullRequestEntity pullRequestEntity = JsonConvert.DeserializeObject<PullRequestEntity>(apiResponse);
 
-                    //SQL Code    
+                        pullRequestEntity.action = gitActions.action;
+                        pullRequestEntity.userid = gitActions.sender.id;
+
+                        await PullRequestSonarDetails(ToDoConstants.PULL_REQUEST_SONAR_URL + pullRequestEntity.number, pullRequestEntity.number);
+
+                        await _gitActionsDAO.SavePullRequestDetails(pullRequestEntity);
+                    }
                 }
             }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+
+            return false;
         }
 
         public async Task<PullRequestSonarDetails> PullRequestSonarDetails(string URL, int? PRId)
@@ -79,12 +95,24 @@ namespace api.layer.BusinessLayer
                         PullRequestSonarDetails pullRequestSonarDetails = JsonConvert.DeserializeObject<PullRequestSonarDetails>(sonarApiResponse);
 
                         Dictionary<string, dynamic> sonarMetric = new Dictionary<string, dynamic>();
-                        foreach (Measure item in pullRequestSonarDetails.Component.Measures)
+                        if (pullRequestSonarDetails?.Component?.Measures != null)
                         {
-                            sonarMetric.Add(item.Metric, item.Periods.FirstOrDefault().Value);
+                            try
+                            {
+                                foreach (Measure item in pullRequestSonarDetails.Component.Measures)
+                                {
+                                    if(item.Periods != null && stringArray.Contains(item.Metric))
+                                    {
+                                        sonarMetric.Add(item.Metric, item.Periods.FirstOrDefault().Value);
+                                    }
+                                }
+                            }
+                            catch(Exception ex)
+                            {
+                                throw ex;
+                            }
+                            await _gitActionsDAO.SaveSonarDetails(PRId, sonarMetric);
                         }
-                        await _gitActionsDAO.SaveSonarDetails(PRId, sonarMetric);
-
                         return pullRequestSonarDetails;
                     }
                 }
@@ -95,15 +123,20 @@ namespace api.layer.BusinessLayer
 
         public async Task<bool> ChecksCompleted(GitActions gitActions)
         {
-            if(gitActions?.check_run.pull_requests != null && gitActions?.check_run.pull_requests.Length > 0)
+            if(gitActions?.check_run?.pull_requests != null && gitActions?.check_run?.pull_requests.Length > 0)
             {
-                await PullRequestSonarDetails(ToDoConstants.PULL_REQUEST_SONAR_URL + gitActions?.check_run.pull_requests?.FirstOrDefault().number.ToString(), gitActions?.check_run.pull_requests?.FirstOrDefault().number);
+                await PullRequestSonarDetails(ToDoConstants.PULL_REQUEST_SONAR_URL + gitActions?.check_run?.pull_requests?.FirstOrDefault().number.ToString(), gitActions?.check_run?.pull_requests?.FirstOrDefault().number);
                 return true;
             }
             else
             {
                 return false;
             }
+        }
+
+        public async Task<string> FetchRaitingReport()
+        {
+            return await _gitActionsDAO.FetchRaitingReport();
         }
 
     }

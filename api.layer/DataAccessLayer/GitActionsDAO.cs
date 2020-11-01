@@ -1,6 +1,8 @@
 ﻿using api.layer.Entities;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 
@@ -59,6 +61,33 @@ namespace api.layer.DataAccessLayer
                         await sql.OpenAsync();
                         await cmd.ExecuteNonQueryAsync();
                         return true;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
+
+        public async Task<string> FetchRaitingReport()
+        {
+            using (SqlConnection sql = new SqlConnection(@"Data Source=MUM02L7746\SQLEXPRESS;Initial Catalog=TODO;Integrated Security=False;Persist Security Info=False;User ID=sa;Password=Password123"))
+            {
+                try
+                {
+                    DataSet ds = new DataSet("Rating Report");
+                    using (SqlCommand cmd = new SqlCommand("SP_Fetch_Reports", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                        SqlDataAdapter da = new SqlDataAdapter();
+                        da.SelectCommand = cmd;
+                        da.Fill(ds);
+                        if(ds.Tables.Count > 0)
+                            return JsonConvert.SerializeObject(ds.Tables["Table"], Formatting.None);
+
+                        return string.Empty;
                     }
                 }
                 catch (Exception ex)
