@@ -16,7 +16,7 @@ namespace api.layer.Controllers
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
-            var abc = 231;
+        
             Execute().Wait();
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
@@ -44,7 +44,6 @@ namespace api.layer.Controllers
             var htmlContent = "<strong> keep up the good work</strong>";
             var msg = MailHelper.CreateSingleEmail(
                 from, to, subject, plainTextContent, htmlContent);
-
             var response = await client.SendEmailAsync(msg);
             return response;
         }
