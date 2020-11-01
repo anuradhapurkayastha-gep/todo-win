@@ -16,10 +16,10 @@ namespace api.layer.Controllers
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
-            var test = 123456;
             var test1 = 123456;
             var test2 = 123456;
             var test3 = 123456;
+            var test4 = 123456;
             Execute().Wait();
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
