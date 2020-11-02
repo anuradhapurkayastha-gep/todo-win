@@ -1,5 +1,7 @@
 ﻿using api.layer.BusinessLayer;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace api.layer.Controllers
 {
@@ -15,9 +17,9 @@ namespace api.layer.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public async Task<List<RatingEntity>> Get()
         {
-            return Ok(_gitActionsManager.FetchRaitingReport());
+            return await _gitActionsManager.FetchRaitingReport();
         }
     }
 }
