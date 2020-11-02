@@ -134,9 +134,24 @@ namespace api.layer.BusinessLayer
             }
         }
 
-        public async Task<string> FetchRaitingReport()
+        public async Task<List<RatingEntity>> FetchRaitingReport()
         {
-            return await _gitActionsDAO.FetchRaitingReport();
+            List<RatingEntity> ratingEntities = await _gitActionsDAO.FetchRaitingReport();
+
+            foreach (RatingEntity item in ratingEntities)
+            {
+                using (var httpClient = new HttpClient())
+                {
+                    httpClient.DefaultRequestHeaders.Add("User-Agent", "TODO-App");
+                    using (var response = await httpClient.GetAsync(ToDoConstants.USER_DETAILS + item.UserId))
+                    {
+                        string apiResponse = await response.Content.ReadAsStringAsync();
+                        item.UserName = JsonConvert.DeserializeObject<UserDetails>(apiResponse).login;
+                    }
+                }
+            }
+
+            return ratingEntities;
         }
 
     }

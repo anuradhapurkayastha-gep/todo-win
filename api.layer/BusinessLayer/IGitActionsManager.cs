@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace api.layer.BusinessLayer
 {
@@ -12,6 +13,6 @@ namespace api.layer.BusinessLayer
 
         public Task<bool> ChecksCompleted(GitActions gitActions);
 
-        public Task<string> FetchRaitingReport();
+        public Task<List<RatingEntity>> FetchRaitingReport();
     }
 }

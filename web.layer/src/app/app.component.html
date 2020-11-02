@@ -1,0 +1,25 @@
+ <header></header>
+ <pannel (clickEvent)='onTabClick($event)'></pannel>
+
+
+ <ng-container #selectContainer></ng-container>
+
+ <ng-template #home>
+     <div style="display: flex; justify-content: center; margin-top: 10px;">
+    <img src="../assets/images/Pull Request Gamification.jpg" alt="Implement Gamification on 'Pull-Request' peer-review process" width="900" height="580">
+  </div>
+ </ng-template>
+ 
+ <ng-template #trending>
+  <div style="display: flex; justify-content: center; margin-top: 10px;">
+    <table-custom  [columnData]='columnData'></table-custom>
+  </div>
+</ng-template>
+
+<ng-template #history>
+   <div style="display: flex; justify-content: center; margin-top: 10px;">
+    <table-custom  [columnData]='columnData'></table-custom>
+  </div>
+</ng-template>
+
+ 
