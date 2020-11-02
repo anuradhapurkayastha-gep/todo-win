@@ -12,7 +12,8 @@ namespace api.layer.Controllers
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
-            var abcdefg = 981273;
+            var abcdefg11 = 981273;
+            var a213efg11 = 981273;
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
