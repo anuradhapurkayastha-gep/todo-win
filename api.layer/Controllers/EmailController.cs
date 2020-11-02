@@ -14,7 +14,6 @@ namespace api.layer.Controllers
         {
             var abcd = 981273;
             var abcd11 = 981273;
-            var abcd11 = 981273;
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
